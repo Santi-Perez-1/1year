@@ -1,0 +1,518 @@
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Anniversary 💘</title>
+  <style>
+    :root{
+      --bg1:#0b1020;
+      --bg2:#0f1b2e;
+      --card:#101a30cc;
+      --border:#ffffff1a;
+      --text:#eaf1ff;
+      --muted:#b7c6ff;
+      --accent:#ff5aa5;
+      --accent2:#7cf6ff;
+      --good:#58ff9a;
+      --warn:#ffd36a;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      min-height:100vh;
+      background:
+        radial-gradient(1000px 600px at 20% 10%, #ff5aa51f, transparent 60%),
+        radial-gradient(900px 700px at 80% 20%, #7cf6ff1c, transparent 55%),
+        radial-gradient(900px 700px at 50% 90%, #ffffff10, transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    /* floating hearts */
+    .hearts{
+      position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.55;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
+    }
+    .heart{
+      position:absolute;
+      width:12px; height:12px;
+      transform: rotate(45deg);
+      background: linear-gradient(135deg, var(--accent), #ffd1e7);
+      border-radius: 3px;
+      animation: floatUp linear infinite;
+    }
+    .heart:before, .heart:after{
+      content:"";
+      position:absolute;
+      width:12px; height:12px;
+      background: inherit;
+      border-radius: 50%;
+    }
+    .heart:before{ left:-6px; top:0; }
+    .heart:after{ left:0; top:-6px; }
+
+    @keyframes floatUp{
+      from{ transform: translateY(0) rotate(45deg); opacity:0; }
+      10%{ opacity:.9; }
+      to{ transform: translateY(-120vh) rotate(45deg); opacity:0; }
+    }
+
+    .wrap{
+      position:relative; z-index:1;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    header{
+      display:flex; gap:14px; align-items:flex-start; justify-content:space-between;
+      margin-bottom: 18px;
+      flex-wrap:wrap;
+    }
+    .title{
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .title h1{
+      margin:0;
+      font-size: clamp(22px, 3.2vw, 34px);
+      letter-spacing: .2px;
+    }
+    .title p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.4;
+      max-width: 62ch;
+    }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #0d1528aa;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .pill b{ color: var(--text); font-weight:650; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 16px;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      backdrop-filter: blur(10px);
+    }
+
+    .card h2{
+      margin:0 0 10px;
+      font-size: 16px;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .tag{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: #0b1323aa;
+      white-space:nowrap;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    @media (max-width: 520px){
+      .stats{ grid-template-columns: 1fr; }
+    }
+    .stat{
+      border: 1px solid var(--border);
+      background: #0b1323aa;
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .stat .label{ color: var(--muted); font-size: 12px; margin-bottom:6px; }
+    .stat .value{ font-size: 18px; font-weight: 750; letter-spacing:.2px; }
+    .tiny{ font-size: 12px; color: var(--muted); margin-top:6px; }
+
+    .bar{
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #0b1323aa;
+      overflow:hidden;
+      margin-top: 8px;
+    }
+    .bar > span{
+      display:block; height:100%;
+      width: 70%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 999px;
+      box-shadow: 0 0 18px #ff5aa560;
+    }
+
+    .terminal{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      background: #060a14cc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      line-height: 1.5;
+      font-size: 13px;
+      color: #dbe6ff;
+      min-height: 150px;
+      position:relative;
+      overflow:hidden;
+    }
+    .terminal .prompt{ color: var(--accent2); }
+    .cursor{
+      display:inline-block;
+      width: 9px; height: 16px;
+      background: #dbe6ff;
+      margin-left: 4px;
+      animation: blink 1s steps(2, end) infinite;
+      vertical-align: middle;
+      opacity:.9;
+    }
+    @keyframes blink{ 50%{ opacity:0; } }
+
+    .btnrow{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top: 12px;
+    }
+    button{
+      cursor:pointer;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, #18284aff, #0b1323ff);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 650;
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+      transition: transform .06s ease, filter .2s ease;
+    }
+    button:hover{ filter: brightness(1.08); }
+    button:active{ transform: translateY(1px) scale(.99); }
+    .btn-ghost{
+      background: #0b1323aa;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    details{
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #0b1323aa;
+      overflow:hidden;
+    }
+    details + details{ margin-top: 10px; }
+    summary{
+      list-style:none;
+      cursor:pointer;
+      padding: 12px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      user-select:none;
+      font-weight: 700;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .when{
+      padding: 0 12px 12px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .chev{
+      color: var(--muted);
+      transition: transform .15s ease;
+    }
+    details[open] .chev{ transform: rotate(90deg); }
+
+    footer{
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align:center;
+      opacity:.9;
+    }
+    a{ color: var(--accent2); text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <div class="hearts" id="hearts"></div>
+
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>Happy Anniversary & Valentine’s Day 💘</h1>
+        <p>A tiny dashboard for my favorite human. (Yes, I coded this. Yes, I’m in lovester.)</p>
+      </div>
+      <div class="pill" title="Edit this in the code">
+        <span>🗓️</span>
+        <span>Since <b id="sinceLabel">—</b></span>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Left: dashboard -->
+      <section class="card">
+        <h2>
+          System Status: boyfriend.exe
+          <span class="tag" id="statusTag">ONLINE</span>
+        </h2>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="label">Days since we dated 💘</div>
+            <div class="value" id="daysSince">—</div>
+            <div class="tiny" id="timeSince">—</div>
+          </div>
+          <div class="stat">
+            <div class="label">Love Status</div>
+            <div class="value" id="loveStatus">100000%</div>
+            <div class="bar"><span id="loveBar"></span></div>
+          </div>
+          <div class="stat">
+            <div class="label">Cuteness Level</div>
+            <div class="value" id="cuteLevel">CRITICAL</div>
+            <div class="tiny">Immediate hugs n cuddles required.</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <h2 style="margin:14px 0 10px">
+            Console
+            <span class="tag">romantic-debug-mode</span>
+          </h2>
+          <div class="terminal" id="terminal" aria-label="terminal output">
+            <div><span class="prompt">></span> Initializing boyfriend.exe</div>
+            <div><span class="prompt">></span> Loading: intuition... intelligence... kindness… loyalty… caring... humor…</div>
+            <div><span class="prompt">></span> Running anniversary_check()</div>
+            <div><span class="prompt">></span> ERROR: too perfect 💖</div>
+            <div><span class="prompt">></span> Printing: I love you.</div>
+            <div><span class="cursor"></span></div>
+          </div>
+
+          <div class="btnrow">
+            <button id="btnCompliment">Generate compliment</button>
+            <button class="btn-ghost" id="btnConfetti">Deploy hearts</button>
+            <button class="btn-ghost" id="btnSong">Toggle song</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Open When -->
+      <aside class="card">
+        <h2>
+          Open When… 🥹
+          <span class="tag">click to reveal</span>
+        </h2>
+
+        <details>
+          <summary>…you 823ing <span class="chev">›</span></summary>
+          <div class="when">
+            If you’re reading this, come here. If you can’t, close your eyes and imagine me hugging you
+            so so tight like I mean it (because I do). Also, 823 as well 💗
+          </div>
+        </details>
+
+        <details>
+          <summary>…you’re stressed <span class="chev">›</span></summary>
+          <div class="when">
+            You’ve handled wayyy harder things than this.
+            You are amazing and precious.
+            I’m always on your team. Always. 🫶
+          </div>
+        </details>
+
+        <details>
+          <summary>…you need motivation <span class="chev">›</span></summary>
+          <div class="when">
+            You’re not behind. You’re building. One step is still a step.
+            Also: I look up to you greatly and believe in you all day every day. 💪💘
+          </div>
+        </details>
+
+        <details>
+          <summary>…you want to smile <span class="chev">›</span></summary>
+          <div class="when">
+            Reminder: you’re my favorite notification.
+            Also, I’m legally required to request one (1) kiss. 😌
+          </div>
+        </details>
+
+        <details>
+          <summary>…it’s our anniversary <span class="chev">›</span></summary>
+          <div class="when">
+            Thank you for choosing me, for being patient with me, and for loving me.
+            I’d pick you again in every timeline. Happy anniversary, baby. 💞
+          </div>
+        </details>
+
+        <footer>
+          Tip: edit the text inside each “Open When…” letter to be personal.
+        </footer>
+      </aside>
+    </div>
+
+    <footer style="margin-top:22px">
+      Made with ♡ and dedication to our future.
+    </footer>
+  </div>
+
+  <!-- cute song asf -->
+  <audio id="song" loop>
+    <source src="Love.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    // ====== EDIT THIS DATE ======
+    // Use local time: YYYY-MM-DD (your anniversary date / date you started dating)
+    const START_DATE = "2025-02-14"; // When we started <333
+
+    // ====== Compliments you can customize ======
+    const compliments = [
+      "You’re my favorite person to do life with.",
+      "Your smile is literally my comfort zone.",
+      "You make ordinary days feel like a win.",
+      "I love how your brain works. It’s hot. (Respectfully.)",
+      "You’re my best decision.",
+      "I’d choose you again. Every time.",
+      "You + me = my favorite algorithm.",
+      "You’re the peace I didn’t know I needed.",
+      "You’re cute. Like… unfairly cute.",
+      "You make me feel safe, loved, and seen."
+    ];
+
+    // ====== Countdown logic ======
+    const start = new Date(START_DATE + "T00:00:00");
+    const sinceLabel = document.getElementById("sinceLabel");
+    const daysSince = document.getElementById("daysSince");
+    const timeSince = document.getElementById("timeSince");
+
+    function pad(n){ return String(n).padStart(2,"0"); }
+
+    function updateSince(){
+      const now = new Date();
+      const diff = now - start;
+      const totalSeconds = Math.max(0, Math.floor(diff / 1000));
+      const d = Math.floor(totalSeconds / 86400);
+      const h = Math.floor((totalSeconds % 86400) / 3600);
+      const m = Math.floor((totalSeconds % 3600) / 60);
+      const s = totalSeconds % 60;
+
+      sinceLabel.textContent = start.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
+      daysSince.textContent = d.toLocaleString();
+      timeSince.textContent = `${pad(h)}h ${pad(m)}m ${pad(s)}s (and counting)`;
+    }
+    updateSince();
+    setInterval(updateSince, 1000);
+
+    // ====== Terminal interactions ======
+    const terminal = document.getElementById("terminal");
+    const btnCompliment = document.getElementById("btnCompliment");
+    const btnConfetti = document.getElementById("btnConfetti");
+    const btnSong = document.getElementById("btnSong");
+    const song = document.getElementById("song");
+
+    function addLine(text){
+      const line = document.createElement("div");
+      line.innerHTML = `<span class="prompt">></span> ${text}`;
+      // insert before the cursor line
+      const cursor = terminal.querySelector(".cursor")?.parentElement;
+      if (cursor) terminal.insertBefore(line, cursor);
+      else terminal.appendChild(line);
+
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    btnCompliment.addEventListener("click", () => {
+      const pick = compliments[Math.floor(Math.random() * compliments.length)];
+      addLine(`Compliment generated: "${pick}"`);
+    });
+
+    btnConfetti.addEventListener("click", () => {
+      addLine("Deploying hearts… ✅");
+      burstHearts(18);
+    });
+
+    btnSong.addEventListener("click", async () => {
+      try{
+        if (song.paused){
+          await song.play();
+          addLine("Background music: ON 🎵");
+        } else {
+          song.pause();
+          addLine("Background music: OFF");
+        }
+      } catch (e){
+        addLine("Music failed to play (browser blocked autoplay). Click again after interacting.");
+      }
+    });
+
+    // ====== Floating hearts generator ======
+    const hearts = document.getElementById("hearts");
+
+    function spawnHeart(){
+      const h = document.createElement("div");
+      h.className = "heart";
+      const left = Math.random() * 100;
+      const size = 8 + Math.random() * 14;
+      const duration = 6 + Math.random() * 8;
+      const delay = Math.random() * 2;
+
+      h.style.left = left + "vw";
+      h.style.bottom = "-20px";
+      h.style.width = size + "px";
+      h.style.height = size + "px";
+      h.style.animationDuration = duration + "s";
+      h.style.animationDelay = delay + "s";
+      h.style.opacity = 0;
+
+      hearts.appendChild(h);
+      setTimeout(() => h.remove(), (duration + delay) * 1000 + 200);
+    }
+
+    function burstHearts(count=12){
+      for (let i=0;i<count;i++){
+        setTimeout(spawnHeart, i*80);
+      }
+    }
+
+    // Gentle ambient hearts
+    setInterval(() => {
+      if (Math.random() < 0.45) spawnHeart();
+    }, 700);
+
+    // Love bar looks "over 100%" by being capped visually
+    document.getElementById("loveBar").style.width = "100%";
+    
+  </script>
+</body>
+</html>
+```
