@@ -524,27 +524,33 @@
     });
 
     // ====== Main song button (top) ======
-    btnSong.addEventListener("click", async () => {
-      try{
-        song.muted = false;
-        song.volume = 0.85;
-        song.load();
+btnSong.addEventListener("click", async () => {
+  try {
+    // If it's currently playing, pause immediately (DON'T call load())
+    if (!song.paused && !song.ended) {
+      song.pause();
+      btnSong.innerHTML = `Play our song 🎵<small>(click to start)</small>`;
+      addLine("Background music: OFF");
+      return;
+    }
 
-        if (song.paused){
-          await song.play();
-          btnSong.innerHTML = `Pause our song ⏸<small>(click to stop)</small>`;
-          addLine("Background music: ON 🎵");
-          burstHearts(10);
-        } else {
-          song.pause();
-          btnSong.innerHTML = `Play our song 🎵<small>(click to start)</small>`;
-          addLine("Background music: OFF");
-        }
-      } catch (e){
-        addLine(`Music error: ${e.name || "Error"} - ${e.message || e}`);
-        addLine('If it’s mobile Safari, tap once anywhere then tap the button again.');
-      }
-    });
+    // Only (re)load if the browser hasn't loaded the file yet
+    if (song.readyState === 0) song.load();
+
+    song.muted = false;
+    song.volume = 0.85;
+
+    await song.play();
+    btnSong.innerHTML = `Pause our song ⏸<small>(click to stop)</small>`;
+    addLine("Background music: ON 🎵");
+    burstHearts(10);
+
+  } catch (e) {
+    addLine(`Music error: ${e.name || "Error"} - ${e.message || e}`);
+    addLine('If it’s mobile Safari, tap once anywhere then tap the button again.');
+  }
+});
+
 
     // Gentle ambient hearts
     setInterval(() => {
