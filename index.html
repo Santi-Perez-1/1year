@@ -1,4 +1,3 @@
-```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -101,6 +100,34 @@
       color: var(--muted);
     }
     .pill b{ color: var(--text); font-weight:650; }
+
+    /* NEW: header action area + main song button */
+    .header-actions{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .btn-main{
+      cursor:pointer;
+      border: 1px solid #ffffff2a;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      color:#081022;
+      font-weight: 850;
+      padding: 12px 16px;
+      border-radius: 14px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.45);
+      transition: transform .06s ease, filter .2s ease;
+    }
+    .btn-main:hover{ filter: brightness(1.08); }
+    .btn-main:active{ transform: translateY(1px) scale(.99); }
+    .btn-main small{
+      display:block;
+      font-weight: 750;
+      opacity:.75;
+      margin-top:2px;
+      font-size: 11px;
+    }
 
     .grid{
       display:grid;
@@ -272,9 +299,18 @@
         <h1>Happy Anniversary & Valentine’s Day 💘</h1>
         <p>A tiny dashboard for my favorite human. (Yes, I coded this. Yes, I’m in lovester.)</p>
       </div>
-      <div class="pill" title="Edit this in the code">
-        <span>🗓️</span>
-        <span>Since <b id="sinceLabel">—</b></span>
+
+      <!-- NEW: main song button up top + since pill -->
+      <div class="header-actions">
+        <button id="btnSong" class="btn-main" type="button">
+          Play our song 🎵
+          <small>(click to start)</small>
+        </button>
+
+        <div class="pill" title="Edit this in the code">
+          <span>🗓️</span>
+          <span>Since <b id="sinceLabel">—</b></span>
+        </div>
       </div>
     </header>
 
@@ -318,10 +354,10 @@
             <div><span class="cursor"></span></div>
           </div>
 
+          <!-- UPDATED: removed toggle song from here -->
           <div class="btnrow">
-            <button id="btnCompliment">Generate compliment</button>
-            <button class="btn-ghost" id="btnConfetti">Deploy hearts</button>
-            <button class="btn-ghost" id="btnSong">Toggle song</button>
+            <button id="btnCompliment" type="button">Generate compliment</button>
+            <button class="btn-ghost" id="btnConfetti" type="button">Deploy hearts</button>
           </div>
         </div>
       </section>
@@ -385,14 +421,13 @@
     </footer>
   </div>
 
-  <!-- cute song asf -->
+  <!-- song file must be in the same repo folder as index.html -->
   <audio id="song" loop>
     <source src="Love.mp3" type="audio/mpeg" />
   </audio>
 
   <script>
     // ====== EDIT THIS DATE ======
-    // Use local time: YYYY-MM-DD (your anniversary date / date you started dating)
     const START_DATE = "2025-02-14"; // When we started <333
 
     // ====== Compliments you can customize ======
@@ -443,36 +478,15 @@
     function addLine(text){
       const line = document.createElement("div");
       line.innerHTML = `<span class="prompt">></span> ${text}`;
-      // insert before the cursor line
       const cursor = terminal.querySelector(".cursor")?.parentElement;
       if (cursor) terminal.insertBefore(line, cursor);
       else terminal.appendChild(line);
-
       terminal.scrollTop = terminal.scrollHeight;
     }
 
     btnCompliment.addEventListener("click", () => {
       const pick = compliments[Math.floor(Math.random() * compliments.length)];
       addLine(`Compliment generated: "${pick}"`);
-    });
-
-    btnConfetti.addEventListener("click", () => {
-      addLine("Deploying hearts… ✅");
-      burstHearts(18);
-    });
-
-    btnSong.addEventListener("click", async () => {
-      try{
-        if (song.paused){
-          await song.play();
-          addLine("Background music: ON 🎵");
-        } else {
-          song.pause();
-          addLine("Background music: OFF");
-        }
-      } catch (e){
-        addLine("Music failed to play (browser blocked autoplay). Click again after interacting.");
-      }
     });
 
     // ====== Floating hearts generator ======
@@ -504,6 +518,34 @@
       }
     }
 
+    btnConfetti.addEventListener("click", () => {
+      addLine("Deploying hearts… ✅");
+      burstHearts(18);
+    });
+
+    // ====== Main song button (top) ======
+    btnSong.addEventListener("click", async () => {
+      try{
+        song.muted = false;
+        song.volume = 0.85;
+        song.load();
+
+        if (song.paused){
+          await song.play();
+          btnSong.innerHTML = `Pause our song ⏸<small>(click to stop)</small>`;
+          addLine("Background music: ON 🎵");
+          burstHearts(10);
+        } else {
+          song.pause();
+          btnSong.innerHTML = `Play our song 🎵<small>(click to start)</small>`;
+          addLine("Background music: OFF");
+        }
+      } catch (e){
+        addLine(`Music error: ${e.name || "Error"} - ${e.message || e}`);
+        addLine('If it’s mobile Safari, tap once anywhere then tap the button again.');
+      }
+    });
+
     // Gentle ambient hearts
     setInterval(() => {
       if (Math.random() < 0.45) spawnHeart();
@@ -511,8 +553,6 @@
 
     // Love bar looks "over 100%" by being capped visually
     document.getElementById("loveBar").style.width = "100%";
-    
   </script>
 </body>
 </html>
-```
